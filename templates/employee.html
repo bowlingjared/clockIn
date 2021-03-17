@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<form method="POST" action="">
+<TABLE BORDER="1">
+
+{% for x in strs %}
+      <TR>
+    <TD>{{ x }}</TD>
+    <TD><INPUT TYPE="checkbox" value={{x}} NAME='shift' ></TD>
+  </TR>
+
+{% endfor %}
+</TABLE>
+<INPUT TYPE="submit"></TD>
+
+
+ <TABLE BORDER="1">
+      <TR>
+    <TD>Your shifts</TD>
+  </TR>
+{% for x in working %}
+      <TR>
+    <TD>{{ x }}</TD>
+  </TR>
+
+{% endfor %}
+</TABLE>
+
+</body>
+</html>
