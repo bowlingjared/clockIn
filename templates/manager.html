@@ -2,8 +2,80 @@
 <html>
 <body>
 
-<h2>Welcome Manager!</h2>
+<form method="POST" action="">
+    <label for="BeginDate">Start date:</label>
 
+    <input type="date" id="BeginDate" name="BeginDate"
+           value="2021-01-01"
+           min="2021-01-01" max="2021-12-31" required>
+
+    <label for="BeginTime">Start time:</label>
+
+    <input type="time" id="BeginTime" name="BeginTime" required>
+
+
+    <label for="EndDate">End date:</label>
+
+    <input type="date" id="EndDate" name="EndDate"
+           value="2021-01-01"
+           min="2021-01-01" max="2021-12-31" required>
+
+    <label for="EndTime">Endtime time:</label>
+
+    <input type="time" id="EndTime" name="EndTime" required>
+
+
+    <INPUT TYPE="submit" name="submit_button" value="Add Shift" >
+
+</form>
+
+
+<form method="POST" action="">
+    <TABLE BORDER="1">
+        <TR>
+            <TD></TD>
+            <TD>Posted By</TD>
+            <TD>Start Time</TD>
+            <TD>End Time</TD>
+        </TR>
+
+
+        {% for x in strs %}
+            <TR>
+                <TD><INPUT TYPE="checkbox" value={{ x[1] }} NAME='shift'></TD>
+                <TD>{{ x[1] }}</TD>
+                <TD>{{ x[2] }}</TD>
+                <TD>{{ x[3] }}</TD>
+            </TR>
+
+        {% endfor %}
+    </TABLE>
+    <INPUT TYPE="submit" value="Select Shift"></TD>
+
+</form>
+
+
+<TABLE BORDER="1">
+    <TR>
+        <TD>Your current shifts</TD>
+
+    </TR>
+    <TR>
+        <TD>Posted By</TD>
+        <TD>Start Time</TD>
+        <TD>End Time</TD>
+    </TR>
+
+
+    {% for x in working %}
+        <TR>
+            <TD>{{ x[1] }}</TD>
+            <TD>{{ x[2] }}</TD>
+            <TD>{{ x[3] }}</TD>
+        </TR>
+
+    {% endfor %}
+</TABLE>
 
 </body>
 </html>

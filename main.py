@@ -15,7 +15,10 @@ def login():
     global userID
     error = None
     if request.method == 'POST':
-        if request.form['username'] in dbquery.get_emp():
+        if int(request.form['username']) in dbquery.get_man():
+            userID = request.form['username']
+            return redirect(url_for('manager'))
+        elif int(request.form['username']) in dbquery.get_emp():
             userID = request.form['username']
             return redirect(url_for('employee'))
 
@@ -31,12 +34,22 @@ def employee():
         shiftreq = request.form.getlist('shift')
         for shift in shiftreq:
             dbquery.take_shift(userID, shift)
-    return render_template('employee.html', strs=dbquery.get_shifts(), working = dbquery.list_shifts(userID))  # render a template
+    return render_template('employee.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID))  # render a template
 
 
-@app.route('/man')
+@app.route('/man', methods=['GET', 'POST'])
 def manager():
-    return render_template('manager.html')  # render a template
+    global userID
+    if request.method == 'POST':
+        if request.form['submit_button'] == 'Add Shift':
+            print(request.form['BeginDate'])
+            print(request.form['BeginTime'])
+            dbquery.add_shift(request.form['BeginDate'], request.form['BeginTime'], request.form['EndDate'], request.form['EndTime'])
+        elif request.form['submit_button'] == 'Select Shift':
+            shiftreq = request.form.getlist('shift')
+            for shift in shiftreq:
+                dbquery.take_shift(userID, shift)
+    return render_template('manager.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID)) # render a template
 
 
 if __name__ == '__main__':
