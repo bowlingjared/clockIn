@@ -73,7 +73,7 @@ def take_shift(empID, shiftId):
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
-
+    print(shiftId)
     cursor = cnx.cursor()
     query = f"INSERT INTO employee_shift VALUES ({shiftId},{empID});"
 
@@ -114,7 +114,7 @@ def get_emp_shifts(empID):
     cursor.execute(query)
 
     shifts = cursor.fetchall()
-    print(shifts)
+
     cursor.close()
     cnx.close()
 

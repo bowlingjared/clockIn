@@ -32,6 +32,7 @@ def employee():
     global userID
     if request.method == 'POST':
         shiftreq = request.form.getlist('shift')
+        print(shiftreq)
         for shift in shiftreq:
             dbquery.take_shift(userID, shift)
     return render_template('employee.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID))  # render a template
@@ -42,8 +43,6 @@ def manager():
     global userID
     if request.method == 'POST':
         if request.form['submit_button'] == 'Add Shift':
-            print(request.form['BeginDate'])
-            print(request.form['BeginTime'])
             dbquery.add_shift(request.form['BeginDate'], request.form['BeginTime'], request.form['EndDate'], request.form['EndTime'])
         elif request.form['submit_button'] == 'Select Shift':
             shiftreq = request.form.getlist('shift')
