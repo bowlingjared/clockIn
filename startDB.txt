@@ -1,0 +1,43 @@
+
+Drop Table if exists  emp;
+
+CREATE TABLE emp (
+    empID varchar(255),
+    FirstName varchar(255),
+    LastName varchar(255),
+    Primary key (empID)
+);
+
+INSERT INTO emp
+VALUES ('001', 'Jim', 'Halpert'); 
+
+INSERT INTO emp
+VALUES ('002', 'Pam', 'Halpert'); 
+
+INSERT INTO emp
+VALUES ('003', 'Michael', 'Scott'); 
+
+drop table if exists shifts;
+
+CREATE TABLE shifts (
+    shiftID varchar(255),
+	Primary key (shiftID)
+);
+
+INSERT INTO shifts
+VALUES ('001'); 
+
+INSERT INTO shifts
+VALUES ('002'); 
+
+INSERT INTO shifts
+VALUES ('003'); 
+
+Drop Table if exists  emp;
+
+CREATE TABLE takenShifts (
+    empID varchar(255),
+    shiftID varchar(255),
+    Primary key (empID, shiftID)
+);
+
