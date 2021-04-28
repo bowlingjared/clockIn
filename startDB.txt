@@ -1,39 +1,76 @@
+DROP TABLE IF EXISTS employee;
+DROP TABLE IF EXISTS manager;
+DROP TABLE IF EXISTS position;
+DROP TABLE IF EXISTS shift;
+DROP TABLE IF EXISTS shift_position;
+DROP TABLE IF EXISTS employee_shift;
 
-Drop Table if exists  emp;
 
-CREATE TABLE emp (
-    empID varchar(255),
-    FirstName varchar(255),
-    LastName varchar(255),
-    Primary key (empID)
+CREATE TABLE employee (
+    emp_id integer NOT NULL,
+    emp_name varchar(30),
+    position_id integer,
+	PRIMARY KEY (emp_id)
 );
 
-INSERT INTO emp
-VALUES ('001', 'Jim', 'Halpert'); 
-
-INSERT INTO emp
-VALUES ('002', 'Pam', 'Halpert'); 
-
-INSERT INTO emp
-VALUES ('003', 'Michael', 'Scott'); 
-
-drop table if exists shifts;
-
-CREATE TABLE shifts (
-    shiftID varchar(255),
-	Primary key (shiftID)
+CREATE TABLE manager (
+    man_id integer NOT NULL,
+    emp_id integer NOT NULL,
+    PRIMARY KEY (man_id)
 );
 
-INSERT INTO shifts
-VALUES ('001'); 
+CREATE TABLE position (
+    position_id integer NOT NULL,
+    position_name varchar(30),
+    wage integer,
+	PRIMARY KEY (position_id)
+);
 
-INSERT INTO shifts
-VALUES ('002'); 
+CREATE TABLE shift (
+    shift_id integer NOT NULL,
+    man_id integer,
+    start_time datetime,
+    end_time datetime,
+	PRIMARY KEY (shift_id)
+);
 
-INSERT INTO shifts
-VALUES ('003'); 
+CREATE TABLE shift_position (
+    shift_id integer NOT NULL,
+    position_id integer NOT NULL,
+    num_emp_needed integer,
+	PRIMARY KEY (shift_id, position_id)
+);
 
-Drop Table if exists  takenShifts;
+CREATE TABLE employee_shift (
+    shift_id integer NOT NULL,
+    emp_id integer NOT NULL,
+	PRIMARY KEY (shift_id, emp_id)
+);
+
+
+INSERT INTO employee
+VALUES (1,'Michael Scott', 1);
+
+
+INSERT INTO employee
+VALUES (2,'Jim Halpter', 2);
+
+
+INSERT INTO manager
+VALUES (1, 1);
+
+INSERT INTO position
+values (1, 'Manager', 20);
+
+
+INSERT INTO position
+values (2, 'Paper Salesman', 20);
+
+INSERT INTO shift
+values(1,1,'2008-11-11 11:12:01' , '2008-11-11 13:23:44');
+
+INSERT INTO shift_position
+values(1,2,1);
 
 CREATE TABLE takenShifts (
     empID varchar(255),
