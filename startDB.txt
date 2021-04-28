@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS position;
 DROP TABLE IF EXISTS shift;
 DROP TABLE IF EXISTS shift_position;
 DROP TABLE IF EXISTS employee_shift;
+DROP TABLE IF EXISTS takenshifts;
 
 
 CREATE TABLE employee (
@@ -34,6 +35,49 @@ CREATE TABLE shift (
 	PRIMARY KEY (shift_id)
 );
 
+CREATE TABLE shift_position (
+    shift_id integer NOT NULL,
+    position_id integer NOT NULL,
+    num_emp_needed integer,
+	PRIMARY KEY (shift_id, position_id)
+);
+
+CREATE TABLE employee_shift (
+    shift_id integer NOT NULL,
+    emp_id integer NOT NULL,
+	PRIMARY KEY (shift_id, emp_id)
+);
+
+
+INSERT INTO employee
+VALUES (1,'Michael Scott', 1);
+
+
+INSERT INTO employee
+VALUES (2,'Jim Halpter', 2);
+
+
+INSERT INTO manager
+VALUES (1, 1);
+
+INSERT INTO position
+values (1, 'Manager', 20);
+
+
+INSERT INTO position
+values (2, 'Paper Salesman', 20);
+
+INSERT INTO shift
+values(1,1,'2008-11-11 11:12:01' , '2008-11-11 13:23:44');
+
+INSERT INTO shift_position
+values(1,2,1);
+
+CREATE TABLE takenShifts (
+    empID varchar(255),
+    shiftID varchar(255),
+    Primary key (empID, shiftID)
+);
 CREATE TABLE shift_position (
     shift_id integer NOT NULL,
     position_id integer NOT NULL,
