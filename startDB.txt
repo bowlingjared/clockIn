@@ -33,11 +33,10 @@ VALUES ('002');
 INSERT INTO shifts
 VALUES ('003'); 
 
-Drop Table if exists  emp;
+Drop Table if exists  takenShifts;
 
 CREATE TABLE takenShifts (
     empID varchar(255),
     shiftID varchar(255),
     Primary key (empID, shiftID)
 );
-
