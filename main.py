@@ -35,7 +35,7 @@ def employee():
         print(shiftreq)
         for shift in shiftreq:
             dbquery.take_shift(userID, shift)
-    return render_template('employee.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID))  # render a template
+    return render_template('employee.html', strs=dbquery.get_shifts(userID), working=dbquery.get_emp_shifts(userID))  # render a template
 
 
 @app.route('/man', methods=['GET', 'POST'])
@@ -48,7 +48,7 @@ def manager():
             shiftreq = request.form.getlist('shift')
             for shift in shiftreq:
                 dbquery.take_shift(userID, shift)
-    return render_template('manager.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID)) # render a template
+    return render_template('manager.html', strs=dbquery.get_shifts(userID), working=dbquery.get_emp_shifts(userID)) # render a template
 
 
 if __name__ == '__main__':
