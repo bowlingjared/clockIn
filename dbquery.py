@@ -49,6 +49,39 @@ def get_shifts():
 
     return id
 
+# returns all positions
+def get_positions():
+    cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
+                                  host=connection_info.MyHost,
+                                  database=connection_info.MyDatabase)
+    cursor = cnx.cursor()
+    query = "SELECT position_id, position_name, wage from position;"
+
+    cursor.execute(query)
+    id = cursor.fetchall()
+
+    cursor.close()
+    cnx.close()
+
+    return id
+
+# update the wages
+def update_wage(id):
+    cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
+                                  host=connection_info.MyHost,
+                                  database=connection_info.MyDatabase)
+    cursor = cnx.cursor()
+    query = f"UPDATE shift_position set num_emp_needed = num_emp_needed - 1 where shift_id = {id};"
+
+    cursor.execute(query)
+
+    cnx.commit()
+    cursor.close()
+
+    cnx.close()
+
+    return 0
+
 
 # Remove an open slot for the specified shift
 def remove_shifts(id):

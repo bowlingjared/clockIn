@@ -48,7 +48,12 @@ def manager():
             shiftreq = request.form.getlist('shift')
             for shift in shiftreq:
                 dbquery.take_shift(userID, shift)
-    return render_template('manager.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID)) # render a template
+        elif request.form['submit_button'] == 'Edit Wages':
+            positionreq = request.form.getlist('position')
+            for position in positionreq:
+                dbquery.update_wage(position_id)
+
+    return render_template('manager.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID), pos=dbquery.get_positions()) # render a template
 
 
 if __name__ == '__main__':
