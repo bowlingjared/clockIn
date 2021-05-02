@@ -77,5 +77,27 @@
     {% endfor %}
 </TABLE>
 
+<form method="POST" action="">
+    <TABLE BORDER="1">
+        <TR>
+            <TD>Position Name</TD>
+            <TD>Current Wage</TD>
+            <TD>New Wage</TD>
+        </TR>
+
+
+        {% for x in position %}
+            <TR>
+                <TD>{{ x[1] }}</TD>
+                <TD>{{ x[2] }}</TD>
+                <TD><INPUT TYPE="text" placeholder="new wage" NAME='position'></TD>
+            </TR>
+
+        {% endfor %}
+    </TABLE>
+    <INPUT TYPE="submit" value="Edit Wages"></TD>
+
+</form>
+
 </body>
 </html>
