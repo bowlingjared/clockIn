@@ -49,8 +49,6 @@ def get_shifts(id):
 
     cursor.execute(query)
 
-
-    cursor.execute(query)
     id = cursor.fetchall()
 
     cursor.close()
@@ -174,3 +172,18 @@ def add_shift(start_date, start_time, end_date, end_time):
     cnx.close()
 
     return 0
+
+
+def get_annual_payroll():
+    cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
+                                  host=connection_info.MyHost,
+                                  database=connection_info.MyDatabase)
+    cursor = cnx.cursor(prepared=True)
+    query = "call GetAnnualHours();"
+
+
+    cursor.execute(query)
+    hours = [x for x in cursor.fetchall()]
+
+
+    return hours

@@ -1,0 +1,23 @@
+
+DROP PROCEDURE  if exists `GetShifts`;
+
+DELIMITER $$
+
+CREATE PROCEDURE GetShifts(
+IN empId int
+)
+BEGIN
+
+declare pos_id int;
+
+
+select position_id into pos_id from employee where emp_id = empId;
+
+
+select * from shift where shift_id in (
+select sh.shift_id from shift sh join shift_position sp on sh.shift_id = sp.shift_id where sp.position_id = pos_id
+);
+
+
+END $$
+DELIMITER ;
