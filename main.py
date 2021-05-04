@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request
-
+import webbrowser
 import dbquery
 
 app = Flask(__name__)
@@ -41,6 +41,7 @@ def employee():
 @app.route('/man', methods=['GET', 'POST'])
 def manager():
     global userID
+
     if request.method == 'POST':
         if request.form['submit_button'] == 'Add Shift':
             dbquery.add_shift(request.form['BeginDate'], request.form['BeginTime'], request.form['EndDate'], request.form['EndTime'])
@@ -48,10 +49,7 @@ def manager():
             shiftreq = request.form.getlist('shift')
             for shift in shiftreq:
                 dbquery.take_shift(userID, shift)
-    if request.method == 'GET':
-        if request.form['submit_button'] == "AP":
-            return redirect(url_for('AnnualPayroll'))
-    return render_template('manager.html', strs=dbquery.get_shifts(userID), working=dbquery.get_emp_shifts(userID)) # render a template
+    return render_template('manager.html', strs=dbquery.get_shifts(userID),working=dbquery.get_emp_shifts(userID))  # render a template
 
 @app.route('/ap', methods=['GET', 'POST'])
 def AnnualPayroll():

@@ -83,11 +83,6 @@ def take_shift(empID, shiftId):
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
 
-    cursor = cnx.cursor(prepared=True)
-    query = f
-
-    cursor.execute(query, (empID, shiftId))
-
 
     cursor = cnx.cursor(prepared=True)
     query = f"INSERT INTO employee_shift VALUES (%s,%s);"
