@@ -48,8 +48,9 @@ def manager():
             shiftreq = request.form.getlist('shift')
             for shift in shiftreq:
                 dbquery.take_shift(userID, shift)
-    elif request.method == 'GET':
-        return redirect(url_for('AnnualPayroll'))
+    if request.method == 'GET':
+        if request.form['submit_button'] == "AP":
+            return redirect(url_for('AnnualPayroll'))
     return render_template('manager.html', strs=dbquery.get_shifts(userID), working=dbquery.get_emp_shifts(userID)) # render a template
 
 @app.route('/ap', methods=['GET', 'POST'])
