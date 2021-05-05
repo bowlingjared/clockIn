@@ -48,6 +48,12 @@ def manager():
             shiftreq = request.form.getlist('shift')
             for shift in shiftreq:
                 dbquery.take_shift(userID, shift)
+        elif request.form['submit_button'] == 'Add Employee':
+            dbquery.add_employee(request.form['emp_name'], request.form['position'])
+        elif request.form['submit_button'] == 'Remove Employee':
+            dbquery.drop_employee(request.form['emp_id'])
+        elif request.form['submit_button'] == 'Edit Position':
+            dbquery.edit_employee(request.form['emp_id'], request.form['position'])
     return render_template('manager.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID)) # render a template
 
 
