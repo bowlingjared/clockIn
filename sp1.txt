@@ -1,0 +1,61 @@
+DROP PROCEDURE  if exists `GetAnnualHours`;
+
+DELIMITER $$
+
+CREATE PROCEDURE GetAnnualHours()
+BEGIN
+
+DECLARE id int;
+DECLARE wages float;
+DECLARE hours float;
+declare ename varchar(30);
+DECLARE done INTEGER DEFAULT 0;
+DECLARE cur CURSOR FOR SELECT distinct emp_id from employee;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+OPEN cur;
+
+DROP TEMPORARY TABLE if exists wagetable;
+CREATE TEMPORARY TABLE  wagetable (
+    empName varchar(30),
+    empId int,
+    hoursworked float,
+    annualwage float,
+    totalearned float,
+	PRIMARY KEY (empId)
+);
+
+my_loop:
+LOOP
+		FETCH FROM cur INTO id;
+        if done = true then  
+			leave my_loop;
+		end if;
+
+        select emp_name into ename from employee where emp_id = id;
+
+		select sum((UNIX_TIMESTAMP(end_time)-UNIX_TIMESTAMP(start_time))/3600)  into hours 
+        from (select end_time, start_time from takenShifts t1 inner join shift t2 on t1.shiftId = t2.shift_id where empId = id) as hours;
+		
+        select wage into wages from employee t1 join position t2 on t1.position_id = t2.position_id where emp_id = id;
+        
+        if (hours IS NULL OR hours = '') then
+			set hours = 0;
+		end if;
+        if (wages IS NULL OR wages = '') then
+			set wages = 0;
+		end if;
+        
+        
+        insert into wagetable values (ename, id, hours, wages, wages*hours);
+        
+
+
+END LOOP my_loop;
+
+CLOSE cur;  
+
+select * from wagetable;
+
+END $$
+DELIMITER ;

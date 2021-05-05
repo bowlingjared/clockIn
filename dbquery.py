@@ -6,8 +6,9 @@ def get_emp():
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
-    cursor = cnx.cursor()
-    query = ("SELECT * from employee")
+    cursor = cnx.cursor(prepared=True)
+    query = "SELECT * from employee"
+
 
     cursor.execute(query)
     id = [x[0] for x in cursor.fetchall()]
@@ -22,8 +23,11 @@ def get_man():
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
-    cursor = cnx.cursor()
-    query = ("SELECT * from manager")
+    cursor = cnx.cursor(prepared=True)
+    query = "SELECT * from manager"
+
+    cursor.execute(query)
+    query = ()
 
     cursor.execute(query)
     id = [x[1] for x in cursor.fetchall()]
@@ -34,14 +38,17 @@ def get_man():
     return id
 
 
-def get_shifts():
+def get_shifts(id):
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
-    cursor = cnx.cursor()
+
     query = "SELECT * from shift where shift_id in (select shift_id from shift_position where num_emp_needed > 0); "
+    cursor = cnx.cursor(prepared=True)
+
 
     cursor.execute(query)
+
     id = cursor.fetchall()
 
     cursor.close()
@@ -88,10 +95,12 @@ def remove_shifts(id):
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
-    cursor = cnx.cursor()
-    query = f"UPDATE shift_position set num_emp_needed = num_emp_needed - 1 where shift_id = {id};"
+    cursor = cnx.cursor(prepared=True)
+    query = "UPDATE shift_position set num_emp_needed = num_emp_needed - 1 where shift_id = %s;"
 
-    cursor.execute(query)
+    cursor.execute(query,(id,))
+
+
 
     cnx.commit()
     cursor.close()
@@ -106,11 +115,13 @@ def take_shift(empID, shiftId):
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
-    print(shiftId)
-    cursor = cnx.cursor()
-    query = f"INSERT INTO employee_shift VALUES ({shiftId},{empID});"
 
-    cursor.execute(query)
+
+    cursor = cnx.cursor(prepared=True)
+    query = f"INSERT INTO employee_shift VALUES (%s,%s);"
+
+    cursor.execute(query, (empID,shiftId))
+
 
     cnx.commit()
     cursor.close()
@@ -126,9 +137,9 @@ def list_shifts(id):
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
-    cursor = cnx.cursor()
-    query = f"select * FROM employee_shift WHERE emp_id = {id};"
-    cursor.execute(query)
+    cursor = cnx.cursor(prepared=True)
+    query = "select * FROM employee_shift WHERE emp_id = %s;"
+    cursor.execute(query, (id,))
 
     shifts = cursor.fetchall()
 
@@ -142,9 +153,9 @@ def get_emp_shifts(empID):
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
-    cursor = cnx.cursor()
-    query = f"select * FROM shift WHERE shift_id in (select shift_id from employee_shift where emp_id = {empID});"
-    cursor.execute(query)
+    cursor = cnx.cursor(prepared=True)
+    query = "select * FROM shift WHERE shift_id in (select shift_id from employee_shift where emp_id = %s);"
+    cursor.execute(query,(empID,))
 
     shifts = cursor.fetchall()
 
@@ -169,20 +180,19 @@ def add_shift(start_date, start_time, end_date, end_time):
     id = cursor.fetchone()[0]
     cursor.close()
 
-    cursor = cnx.cursor()
+    cursor = cnx.cursor(prepared=True)
+    query = f"INSERT INTO shift VALUES (%s,{1},\'{start}\',\'{end}\');"
 
-    query = f"INSERT INTO shift VALUES ({id},{1},\'{start}\',\'{end}\');"
-
-    cursor.execute(query)
+    cursor.execute(query,(id,))
 
     cnx.commit()
     cursor.close()
 
-    cursor = cnx.cursor()
+    cursor = cnx.cursor(prepared=True)
 
-    query = f"INSERT INTO shift_position VALUES ({id},{1},{1});"
+    query = f"INSERT INTO shift_position VALUES (%s,{1},{1});"
 
-    cursor.execute(query)
+    cursor.execute(query,(id,))
 
     cnx.commit()
     cursor.close()
@@ -190,3 +200,18 @@ def add_shift(start_date, start_time, end_date, end_time):
     cnx.close()
 
     return 0
+
+
+def get_annual_payroll():
+    cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
+                                  host=connection_info.MyHost,
+                                  database=connection_info.MyDatabase)
+    cursor = cnx.cursor(prepared=True)
+    query = "call GetAnnualHours();"
+
+
+    cursor.execute(query)
+    hours = [x for x in cursor.fetchall()]
+
+
+    return hours

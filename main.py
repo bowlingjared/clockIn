@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request
-
+import webbrowser
 import dbquery
 
 app = Flask(__name__)
@@ -31,12 +31,13 @@ def employee():
         shiftreq = request.form.getlist('shift')
         for shift in shiftreq:
             dbquery.take_shift(userID, shift)
-    return render_template('employee.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID))  # render a template
+    return render_template('employee.html', strs=dbquery.get_shifts(userID), working=dbquery.get_emp_shifts(userID))  # render a template
 
 
 @app.route('/man', methods=['GET', 'POST'])
 def manager():
     global userID
+
     if request.method == 'POST':
         if request.form.get("submit_button"):
             dbquery.add_shift(request.form['BeginDate'], request.form['BeginTime'], request.form['EndDate'], request.form['EndTime'])
@@ -55,7 +56,12 @@ def manager():
                     (float(new_wage) >= 0)):
                     dbquery.update_wage(pos_idreq[index], new_wage)
                 index = index + 1
-    return render_template('manager.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID), pos=dbquery.get_positions()) # render a template
+    return render_template('manager.html', strs=dbquery.get_shifts(userID), working=dbquery.get_emp_shifts(userID), pos=dbquery.get_positions()) # render a template
+
+@app.route('/ap', methods=['GET', 'POST'])
+def AnnualPayroll():
+
+    return render_template('annualpayroll.html', working=dbquery.get_annual_payroll(), error='Oh no!')
 
 
 if __name__ == '__main__':
