@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<form method="POST" action="">
+<form method="POST" action="{{ url_for('employee') }}">
     <TABLE BORDER="1">
         <TR>
             <TD></TD>
@@ -26,28 +26,34 @@
 
 </form>
 
-
-<TABLE BORDER="1">
-    <TR>
-        <TD>Your current shifts</TD>
-
-    </TR>
-    <TR>
-        <TD>Posted By</TD>
-        <TD>Start Time</TD>
-        <TD>End Time</TD>
-    </TR>
-
-
-    {% for x in working %}
+<form method="POST" action="{{ url_for('update') }}">
+    <TABLE BORDER="1">
         <TR>
-            <TD>{{ x[1] }}</TD>
-            <TD>{{ x[2] }}</TD>
-            <TD>{{ x[3] }}</TD>
+            <TD>Your current shifts</TD>
+
+        </TR>
+        <TR>
+            <TD>Posted By</TD>
+            <TD>Start Time</TD>
+            <TD>End Time</TD>
+            <TD>Remove Shifts</TD>
+
         </TR>
 
-    {% endfor %}
-</TABLE>
+
+        {% for x in working %}
+            <TR>
+                <TD><INPUT TYPE="checkbox" value={{ x[0] }} NAME='delete'></TD>
+                <TD>{{ x[1] }}</TD>
+                <TD>{{ x[2] }}</TD>
+                <TD>{{ x[3] }}</TD>
+            </TR>
+
+        {% endfor %}
+    </TABLE>
+    <INPUT TYPE="submit" value="Delete shifts"></TD>
+
+</form>
 
 </body>
 </html>

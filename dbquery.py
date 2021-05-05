@@ -87,6 +87,22 @@ def take_shift(empID, shiftId):
 
     return 0
 
+#Update shifts in order to remove a shift from an employee
+def update_shifts(empID, shiftId):
+    cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
+                                  host=connection_info.MyHost,
+                                  database=connection_info.MyDatabase)
+    cursor = cnx.cursor()
+    query = f"UPDATE shift_position set num_emp_needed = num_emp_needed + 1 where shift_id = {shiftId};"
+    cursor.execute(query)
+    cnx.commit()
+
+    query = f"DELETE from employee_shift where shift_id={shiftId} and emp_id={empID}"
+    cursor.execute(query)
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+    return 0
 
 # Gets all of the current shifts for a current employee
 def list_shifts(id):
