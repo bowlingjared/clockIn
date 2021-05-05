@@ -7,9 +7,6 @@ app.config['SECRET_KEY'] = 'you-will-never-guess'
 
 userID = None
 
-
-
-
 @app.route('/', methods=['GET', 'POST'])
 def login():
     global userID
@@ -32,7 +29,6 @@ def employee():
     global userID
     if request.method == 'POST':
         shiftreq = request.form.getlist('shift')
-        print(shiftreq)
         for shift in shiftreq:
             dbquery.take_shift(userID, shift)
     return render_template('employee.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID))  # render a template
@@ -42,17 +38,23 @@ def employee():
 def manager():
     global userID
     if request.method == 'POST':
-        if request.form['submit_button'] == 'Add Shift':
+        if request.form.get("submit_button"):
             dbquery.add_shift(request.form['BeginDate'], request.form['BeginTime'], request.form['EndDate'], request.form['EndTime'])
-        elif request.form['submit_button'] == 'Select Shift':
+        elif request.form.get("select_shift"):
             shiftreq = request.form.getlist('shift')
             for shift in shiftreq:
                 dbquery.take_shift(userID, shift)
-        elif request.form['submit_button'] == 'Edit Wages':
-            positionreq = request.form.getlist('position')
-            for position in positionreq:
-                dbquery.update_wage(position_id)
-
+        elif request.form.get('edit_wages'):
+            pos_idreq = request.form.getlist('pos_id')
+            newwagereq = request.form.getlist('new_wage')
+            index = 0
+            for new_wage in newwagereq:
+                # if not null, not contains characters, and greater than zero
+                if ((not new_wage == '') and 
+                    (not new_wage.upper().isupper()) and
+                    (float(new_wage) >= 0)):
+                    dbquery.update_wage(pos_idreq[index], new_wage)
+                index = index + 1
     return render_template('manager.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID), pos=dbquery.get_positions()) # render a template
 
 

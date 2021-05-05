@@ -25,7 +25,7 @@
     <input type="time" id="EndTime" name="EndTime" required>
 
 
-    <INPUT TYPE="submit" name="submit_button" value="Add Shift" >
+    <BUTTON TYPE="submit" name="submit_button" value="Add Shift" > Submit_Button </BUTTON>
 
 </form>
 
@@ -50,7 +50,7 @@
 
         {% endfor %}
     </TABLE>
-    <INPUT TYPE="submit" value="Select Shift"></TD>
+    <BUTTON TYPE="submit" name="select_shift" value="Select Shift"> Select Shift </BUTTON>
 
 </form>
 
@@ -80,6 +80,9 @@
 <form method="POST" action="">
     <TABLE BORDER="1">
         <TR>
+            <TD>Change wages for positions.</TD>
+        </TR>
+        <TR>
             <TD>Position Name</TD>
             <TD>Current Wage</TD>
             <TD>New Wage</TD>
@@ -88,14 +91,15 @@
 
         {% for x in pos %}
             <TR>
+                <INPUT TYPE="hidden" VALUE={{ x[0] }} NAME='pos_id'>
                 <TD>{{ x[1] }}</TD>
-                <TD>{{ x[2] }}</TD>
-                <TD><INPUT TYPE="text" placeholder="new wage" NAME='position'></TD>
+                <TD>{{ x[2] }}<NAME=old_wage></TD>
+                <TD><INPUT TYPE="text" placeholder="new wage" NAME='new_wage'></TD>
             </TR>
 
         {% endfor %}
     </TABLE>
-    <INPUT TYPE="submit" value="Edit Wages"></TD>
+    <BUTTON TYPE="submit" name="edit_wages" value="Edit Wages"> Edit Wages </BUTTON>
 
 </form>
 

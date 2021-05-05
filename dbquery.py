@@ -66,12 +66,12 @@ def get_positions():
     return id
 
 # update the wages
-def update_wage(id):
+def update_wage(position_id, new_wage):
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
     cursor = cnx.cursor()
-    query = f"UPDATE shift_position set num_emp_needed = num_emp_needed - 1 where shift_id = {id};"
+    query = f"UPDATE position SET wage = {new_wage} WHERE position_id = {position_id};"
 
     cursor.execute(query)
 
@@ -135,7 +135,7 @@ def list_shifts(id):
     cursor.close()
     cnx.close()
 
-    return shifts;
+    return shifts
 
 
 def get_emp_shifts(empID):
