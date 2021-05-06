@@ -1,0 +1,61 @@
+DROP PROCEDURE  if exists `GetWeeklyTimeCard`;
+
+DELIMITER $$
+
+CREATE PROCEDURE GetWeeklyTimeCard(
+IN empId int
+)
+BEGIN
+
+DECLARE sid int;
+DECLARE wages float;
+DECLARE ST datetime;
+DECLARE ET datetime;
+DECLARE hours float;
+DECLARE done INTEGER DEFAULT 0;
+DECLARE cur CURSOR FOR SELECT t1.shift_id,start_time, end_time from employee_shift t1 join shift t2 on t1.shift_id = t2.shift_id where t1.emp_id = empId and yearweek(start_time) = yearweek(curdate());
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+OPEN cur;
+
+DROP TEMPORARY TABLE if exists timecard;
+CREATE TEMPORARY TABLE  timecard (
+    shift_id int,
+    start_time datetime,
+    end_time datetime,
+    hours float,
+    totalearned float,
+	PRIMARY KEY (shift_id)
+);
+
+select wage into wages from employee t1 join position t2 on t1.position_id = t2.position_id where empId = t1.emp_id;
+
+my_loop:
+LOOP
+		FETCH FROM cur INTO sid, ST, ET;
+        if done = true then
+			leave my_loop;
+		end if;
+
+        set hours = ((UNIX_TIMESTAMP(ET)-UNIX_TIMESTAMP(ST))/3600);
+
+        if (hours IS NULL OR hours = '') then
+			set hours = 0;
+		end if;
+        if (wages IS NULL OR wages = '') then
+			set wages = 0;
+		end if;
+
+
+        insert into timecard values (sid, ST, ET, hours, wages*hours);
+
+
+
+END LOOP my_loop;
+
+CLOSE cur;
+
+select * from timecard;
+
+END $$
+DELIMITER ;
