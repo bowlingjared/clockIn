@@ -53,19 +53,46 @@ def update():
 def manager():
     global userID
     if request.method == 'POST':
-        if request.form['submit_button'] == 'Add Shift':
+        if request.form.get('Add Shift'):
             dbquery.add_shift(request.form['BeginDate'], request.form['BeginTime'], request.form['EndDate'], request.form['EndTime'])
-        elif request.form['submit_button'] == 'Select Shift':
+        elif request.form.get('select_shift'):
             shiftreq = request.form.getlist('shift')
             for shift in shiftreq:
                 dbquery.take_shift(userID, shift)
-        elif request.form['submit_button'] == 'Add Employee':
+        elif request.form.get('Add Employee'):
             dbquery.add_employee(request.form['emp_name'], request.form['position'])
-        elif request.form['submit_button'] == 'Remove Employee':
+        elif request.form.get('Remove Employee'):
             dbquery.drop_employee(request.form['emp_id'])
-        elif request.form['submit_button'] == 'Edit Position':
+        elif request.form.get('Edit Position'):
             dbquery.edit_employee(request.form['emp_id'], request.form['position'])
-    return render_template('manager.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID)) # render a template
+        elif request.form.get('edit_wages'):
+            pos_idreq = request.form.getlist('pos_id')
+            newwagereq = request.form.getlist('new_wage')
+            index = 0
+            for new_wage in newwagereq:
+                # if not null, not contains characters, and greater than zero
+                if ((not new_wage == '') and 
+                    (not new_wage.upper().isupper()) and
+                    (float(new_wage) >= 0)):
+                    dbquery.update_wage(pos_idreq[index], new_wage)
+                index = index + 1
+    return render_template('manager.html', strs=dbquery.get_shifts(userID), working=dbquery.get_emp_shifts(userID), pos=dbquery.get_positions()) # render a template
+
+@app.route('/ap', methods=['GET', 'POST'])
+def AnnualPayroll():
+
+    return render_template('annualpayroll.html', working=dbquery.get_annual_payroll(), error='Oh no!')
+
+@app.route('/wp', methods=['GET', 'POST'])
+def WeeklyPayroll():
+
+    return render_template('WeeklyPayroll.html', working=dbquery.get_weekly_payroll(), error='Oh no!')
+
+@app.route('/tc', methods=['GET', 'POST'])
+def WeeklyTimecard():
+
+    return render_template('TimeCard.html', working=dbquery.get_weekly_timecard(userID), error='Oh no!')
+
 
 
 if __name__ == '__main__':
