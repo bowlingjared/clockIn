@@ -3,6 +3,7 @@
 <body>
 
 <form method="POST" action="">
+
     <label for="BeginDate">Start date:</label>
 
     <input type="date" id="BeginDate" name="BeginDate"
@@ -20,12 +21,21 @@
            value="2021-01-01"
            min="2021-01-01" max="2021-12-31" required>
 
-    <label for="EndTime">Endtime time:</label>
+    <label for="EndTime">End time:</label>
 
     <input type="time" id="EndTime" name="EndTime" required>
 
+    <label for="ShiftType">Position Type</label>
 
-    <BUTTON TYPE="submit" name="submit_button" value="Add Shift" > Submit_Button </BUTTON>
+    <select name="ShiftType" id="ShiftType">
+        {% for x in pos %}
+            <option value={{ x[0] }}>{{ x[1] }}</option>
+
+        {% endfor %}
+    </select>
+
+
+    <INPUT TYPE="submit" name="submit_button" value="Add Shift" >
 
 </form>
 
