@@ -3,6 +3,7 @@
 <body>
 
 <form method="POST" action="">
+
     <label for="BeginDate">Start date:</label>
 
     <input type="date" id="BeginDate" name="BeginDate"
@@ -20,9 +21,18 @@
            value="2021-01-01"
            min="2021-01-01" max="2021-12-31" required>
 
-    <label for="EndTime">Endtime time:</label>
+    <label for="EndTime">End time:</label>
 
     <input type="time" id="EndTime" name="EndTime" required>
+
+    <label for="ShiftType">Position Type</label>
+
+    <select name="ShiftType" id="ShiftType">
+        {% for x in pos %}
+            <option value={{ x[0] }}>{{ x[1] }}</option>
+
+        {% endfor %}
+    </select>
 
 
     <INPUT TYPE="submit" name="submit_button" value="Add Shift" >
@@ -50,7 +60,7 @@
 
         {% endfor %}
     </TABLE>
-    <INPUT TYPE="submit" value="Select Shift"></TD>
+    <BUTTON TYPE="submit" name="select_shift" value="Select Shift"> Select Shift </BUTTON>
 
 </form>
 
@@ -85,7 +95,7 @@
 
     <input type="number" id="position" name="position">
 
-    <INPUT TYPE="submit" name="submit_button" value="Add Employee" >
+    <INPUT TYPE="submit" name="add_employee" value="Add Employee" >
 
 </form>
 
@@ -95,7 +105,7 @@
 
     <input type="number" id="emp_id" name="emp_id">
 
-    <INPUT TYPE="submit" name="submit_button" value="Remove Employee" >
+    <INPUT TYPE="submit" name="remove_employee" value="Remove Employee" >
 
 </form>
 
@@ -107,9 +117,39 @@
 
     <input type="number" id="position" name="position">
 
-    <INPUT TYPE="submit" name="submit_button" value="Edit Position" >
+    <INPUT TYPE="submit" name="edit_position" value="Edit Position" >
 
 </form>
+  
+<form method="POST" action="">
+    <TABLE BORDER="1">
+        <TR>
+            <TD>Change wages for positions.</TD>
+        </TR>
+        <TR>
+            <TD>Position Name</TD>
+            <TD>Current Wage</TD>
+            <TD>New Wage</TD>
+        </TR>
+
+
+        {% for x in pos %}
+            <TR>
+                <INPUT TYPE="hidden" VALUE={{ x[0] }} NAME='pos_id'>
+                <TD>{{ x[1] }}</TD>
+                <TD>{{ x[2] }}<NAME=old_wage></TD>
+                <TD><INPUT TYPE="text" placeholder="new wage" NAME='new_wage'></TD>
+            </TR>
+
+        {% endfor %}
+    </TABLE>
+    <BUTTON TYPE="submit" name="edit_wages" value="Edit Wages"> Edit Wages </BUTTON>
+
+</form>
+                
+<a href=tc ><button target="_blank">View Time Card</button></a>
+<a href=ap ><button target="_blank">Annual Pay Roll</button></a>
+<a href=wp ><button target="_blank">Weekly Pay Roll</button></a>
 
 </body>
 </html>

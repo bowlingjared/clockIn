@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<TABLE BORDER="1">
+    <TR>
+        <TD>Weekly Payroll</TD>
+
+    </TR>
+    <TR>
+        <TD>Employee Name</TD>
+        <TD>Hours This Week</TD>
+        <TD>Wage</TD>
+        <TD>Total Earned</TD>
+    </TR>
+
+
+    {% for x in working %}
+        <TR>
+            <TD>{{ x[0] }}</TD>
+            <TD>{{ x[2] }}</TD>
+            <TD>{{ x[3] }}</TD>
+            <TD>{{ x[4] }}</TD>
+        </TR>
+
+    {% endfor %}
+</TABLE>
+
+
+</body>
+</html>

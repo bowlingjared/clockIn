@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS position;
 DROP TABLE IF EXISTS shift;
 DROP TABLE IF EXISTS shift_position;
 DROP TABLE IF EXISTS employee_shift;
-DROP TABLE IF EXISTS takenshifts;
+DROP TABLE IF EXISTS takenShifts;
 
 
 CREATE TABLE employee (
@@ -57,17 +57,14 @@ CREATE TABLE takenShifts (
 INSERT INTO employee
 VALUES (1,'Michael Scott', 1);
 
-
 INSERT INTO employee
 VALUES (2,'Jim Halpter', 2);
-
 
 INSERT INTO manager
 VALUES (1, 1);
 
 INSERT INTO position
 values (1, 'Manager', 20);
-
 
 INSERT INTO position
 values (2, 'Paper Salesman', 20);
