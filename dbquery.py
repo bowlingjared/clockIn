@@ -43,11 +43,10 @@ def get_shifts(id):
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
 
-    query = "SELECT * from shift where shift_id in (select shift_id from shift_position where num_emp_needed > 0); "
+    query = "SELECT * from shift where shift_id in (select shift_id from shift_position where num_emp_needed > 0 and position_id = (select position_id from employee where emp_id = %s)); "
     cursor = cnx.cursor(prepared=True)
 
-
-    cursor.execute(query)
+    cursor.execute(query, (id,))
 
     id = cursor.fetchall()
 
