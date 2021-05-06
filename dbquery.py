@@ -61,7 +61,7 @@ def get_positions():
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
-    cursor = cnx.cursor()
+    cursor = cnx.cursor(prepared=True)
     query = "SELECT position_id, position_name, wage from position;"
 
     cursor.execute(query)
@@ -77,10 +77,10 @@ def update_wage(position_id, new_wage):
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
-    cursor = cnx.cursor()
-    query = f"UPDATE position SET wage = {new_wage} WHERE position_id = {position_id};"
+    cursor = cnx.cursor(Prepared = True)
+    query = "UPDATE position SET wage = %s WHERE position_id = %s;"
 
-    cursor.execute(query)
+    cursor.execute(query, (position_id, new_wage))
 
     cnx.commit()
     cursor.close()
@@ -165,7 +165,7 @@ def get_emp_shifts(empID):
     return shifts
 
 
-def add_shift(start_date, start_time, end_date, end_time):
+def add_shift(start_date, start_time, end_date, end_time, pos_id, manID):
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
                                   database=connection_info.MyDatabase)
@@ -181,18 +181,18 @@ def add_shift(start_date, start_time, end_date, end_time):
     cursor.close()
 
     cursor = cnx.cursor(prepared=True)
-    query = f"INSERT INTO shift VALUES (%s,{1},\'{start}\',\'{end}\');"
+    query = "INSERT INTO shift VALUES (%s,%s,%s,%s);"
 
-    cursor.execute(query,(id,))
+    cursor.execute(query, (id, manID, start, end))
 
     cnx.commit()
     cursor.close()
 
     cursor = cnx.cursor(prepared=True)
 
-    query = f"INSERT INTO shift_position VALUES (%s,{1},{1});"
+    query = "INSERT INTO shift_position VALUES (%s,%s,1);"
 
-    cursor.execute(query,(id,))
+    cursor.execute(query, (id, pos_id))
 
     cnx.commit()
     cursor.close()
@@ -202,6 +202,7 @@ def add_shift(start_date, start_time, end_date, end_time):
     return 0
 
 
+
 def get_annual_payroll():
     cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
                                   host=connection_info.MyHost,
@@ -209,9 +210,31 @@ def get_annual_payroll():
     cursor = cnx.cursor(prepared=True)
     query = "call GetAnnualHours();"
 
+    cursor.execute(query)
+    hours = [x for x in cursor.fetchall()]
+
+    return hours
+
+def get_weekly_payroll():
+    cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
+                                  host=connection_info.MyHost,
+                                  database=connection_info.MyDatabase)
+    cursor = cnx.cursor(prepared=True)
+    query = "call GetWeeklyHours();"
 
     cursor.execute(query)
     hours = [x for x in cursor.fetchall()]
 
+    return hours
+
+def get_weekly_timecard(id):
+    cnx = mysql.connector.connect(user=connection_info.MyUser, password=connection_info.MyPassword,
+                                  host=connection_info.MyHost,
+                                  database=connection_info.MyDatabase)
+    cursor = cnx.cursor(prepared=True)
+    query = "call GetWeeklyTimeCard(%s);"
+
+    cursor.execute(query, (id,))
+    hours = [x for x in cursor.fetchall()]
 
     return hours
