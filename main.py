@@ -40,7 +40,7 @@ def manager():
 
     if request.method == 'POST':
         if request.form.get("submit_button"):
-            dbquery.add_shift(request.form['BeginDate'], request.form['BeginTime'], request.form['EndDate'], request.form['EndTime'])
+            dbquery.add_shift(request.form['BeginDate'], request.form['BeginTime'], request.form['EndDate'], request.form['EndTime'], request.form['ShiftType'], userID)
         elif request.form.get("select_shift"):
             shiftreq = request.form.getlist('shift')
             for shift in shiftreq:
@@ -62,6 +62,17 @@ def manager():
 def AnnualPayroll():
 
     return render_template('annualpayroll.html', working=dbquery.get_annual_payroll(), error='Oh no!')
+
+@app.route('/wp', methods=['GET', 'POST'])
+def WeeklyPayroll():
+
+    return render_template('WeeklyPayroll.html', working=dbquery.get_weekly_payroll(), error='Oh no!')
+
+@app.route('/tc', methods=['GET', 'POST'])
+def WeeklyTimecard():
+
+    return render_template('TimeCard.html', working=dbquery.get_weekly_timecard(userID), error='Oh no!')
+
 
 
 if __name__ == '__main__':
