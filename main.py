@@ -27,6 +27,7 @@ def login():
     return render_template('login.html', error=error)
 
 
+
 @app.route('/emp', methods=['GET', 'POST'])
 def employee():
     global userID
@@ -35,6 +36,16 @@ def employee():
         print(shiftreq)
         for shift in shiftreq:
             dbquery.take_shift(userID, shift)
+    return render_template('employee.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID))  # render a template
+
+@app.route('/update', methods=['GET','POST'])
+def update():
+    global userID
+    if request.method == 'POST':
+        shiftreq = request.form.getlist('delete')
+        print(shiftreq)
+        for shift in shiftreq:
+            dbquery.update_shifts(userID, shift)
     return render_template('employee.html', strs=dbquery.get_shifts(), working=dbquery.get_emp_shifts(userID))  # render a template
 
 
